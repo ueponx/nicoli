@@ -1,0 +1,99 @@
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        #container {
+            position: relative;
+            height: 100%;
+            width: 100%;
+            background-color: #000;
+        }
+
+        #video {
+            position: absolute;
+            width: 960px;
+            height: 540px;
+        }
+
+        #canvas {
+            position: absolute;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        window.onload = function () {
+            var media = navigator.mediaDevices.getUserMedia({
+                video: { facingMode: "user" },
+                audio: false
+            });
+            media.then((stream) => {
+                video.srcObject = stream;
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <div id="container">
+        <video id="video" width="960px" height="540px" autoplay></video>
+        <canvas id="canvas" width="960px" height="540px" style="background-color: rgba(0,0,0, 0.0);"></canvas>
+    </div>
+
+    <script type="text/javascript">
+        let canvas = document.getElementById("canvas");
+        let context = canvas.getContext("2d");
+        let timerID;
+
+        //文字のスタイルを指定
+        context.font = '32px serif';
+        context.fillStyle = '#404040';
+        context.textBaseline = 'center';
+        speed = 5;
+
+        colorTable = ['#FFCC33', '#66FF66', '#FF0000', '#0066FF'];
+
+        commentData = [
+            { text: "👏👏👏👏👏👏", width: context.measureText("👏👏👏👏👏👏").width, x: 960, y: 80, color: 0, play: true },
+            { text: "8888888888", width: context.measureText("8888888888").width, x: 960, y: 120, color: 1, play: true },
+        ];
+
+        function draw(value) {
+            context.fillStyle = colorTable[value.color];
+            context.fillText(value.text, value.x, value.y);
+
+            value.x -= speed;
+            if (value.x < -1 * value.width) {
+                value.play = false;
+            }
+        }
+
+        timerID = setInterval(() => {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            commentData.forEach((v) => {
+                draw(v);
+            });
+            if (commentData[0].play == false) {
+                commentData.shift();
+            }
+        }, 20);
+
+        TESTtimerID = setInterval(() => {
+            let random = Math.floor(Math.random() * 160) +　35;
+            let colorIndex = Math.floor(Math.random() * 4);
+            commentData.push({ text: "😂😂😂😂😂😂" + random, width: context.measureText("😂😂😂😂😂😂").width, x: 960, y: random, color: colorIndex, play: true });
+        }, 1000);
+    </script>
+</body>
+
+</html>

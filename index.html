@@ -2,6 +2,7 @@
 
 <head>
     <meta charset="utf-8">
+    <link href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -18,20 +19,18 @@
             width: 100%;
             height: 100%;
             background-color: #000;
+            border: 1px solid black;
         }
 
         #video {
             position: absolute;
             width: 100%;
             height: 100%;
-            /* width: 960px;
-            height: 540px; */
         }
 
         #canvas {
             position: absolute;
-            /* width: 100%;
-            height: 100%; */
+            /* border: 1px solid black; */
         }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -59,16 +58,19 @@
         let context = canvas.getContext("2d");
         let timerID;
         let startX = 1920;
-        let speed = 4;
+        let speed = 5;
         let colorTable = ['#FFCC33', '#66FF66', '#FF0000', '#0066FF'];
-        let fontTable = ['18px sans-serif', '24px sans-serif', '48px sans-serif'];        
-        //let fontTable = ['18px serif', '24px serif', '48px serif'];
+        let fontTable = ["24px 'Kosugi Maru'", "32px 'Kosugi Maru'", "48px 'Kosugi Maru'"];
+        //let fontTable = ['18px sans-serif', '24px sans-serif', '48px sans-serif'];
         let displayAreaMinY = 20;
         let displayAreaRandomMax = 120;
 
         context.font = fontTable[2];
         context.fillStyle = '#404040';
-        context.textBaseline = 'left';
+        context.lineWidth = 1.0;
+        context.strokeStyle = "#000";
+        context.textAlign = 'left';
+        context.textBaseline = 'middle';
 
         commentData = [
             { text: "👏👏👏👏👏👏", width: context.measureText("👏👏👏👏👏👏").width, x: startX / 2, y: 80, color: 0, play: true },
@@ -80,6 +82,7 @@
         function draw(value) {
             context.fillStyle = colorTable[value.color];
             context.fillText(value.text, value.x, value.y);
+            context.strokeText(value.text, value.x, value.y);
 
             value.x -= speed;
             if (value.x < -1 * value.width) {

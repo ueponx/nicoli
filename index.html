@@ -15,19 +15,23 @@
 
         #container {
             position: relative;
-            height: 100%;
             width: 100%;
+            height: 100%;
             background-color: #000;
         }
 
         #video {
             position: absolute;
-            width: 960px;
-            height: 540px;
+            width: 100%;
+            height: 100%;
+            /* width: 960px;
+            height: 540px; */
         }
 
         #canvas {
             position: absolute;
+            width: 100%;
+            height: 100%;
         }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -45,10 +49,15 @@
 </head>
 
 <body>
-    <div id="container">
+    <!-- <div id="container">
         <video id="video" width="960px" height="540px" autoplay></video>
         <canvas id="canvas" width="960px" height="540px" style="background-color: rgba(0,0,0, 0.0);"></canvas>
+    </div> -->
+    <div id="container">
+        <video id="video" autoplay></video>
+        <canvas id="canvas" style="background-color: rgba(0,0,0, 0.0);"></canvas>
     </div>
+
 
     <script type="text/javascript">
         let canvas = document.getElementById("canvas");

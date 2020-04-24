@@ -30,8 +30,8 @@
 
         #canvas {
             position: absolute;
-            width: 100%;
-            height: 100%;
+            /* width: 100%;
+            height: 100%; */
         }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -49,33 +49,33 @@
 </head>
 
 <body>
-    <!-- <div id="container">
-        <video id="video" width="960px" height="540px" autoplay></video>
-        <canvas id="canvas" width="960px" height="540px" style="background-color: rgba(0,0,0, 0.0);"></canvas>
-    </div> -->
     <div id="container">
         <video id="video" autoplay></video>
-        <canvas id="canvas" style="background-color: rgba(0,0,0, 0.0);"></canvas>
+        <canvas id="canvas" width="1920px" height="540px" style="background-color: rgba(0,0,0, 0.0);"></canvas>
     </div>
-
 
     <script type="text/javascript">
         let canvas = document.getElementById("canvas");
         let context = canvas.getContext("2d");
         let timerID;
+        let startX = 1920;
+        let speed = 4;
+        let colorTable = ['#FFCC33', '#66FF66', '#FF0000', '#0066FF'];
+        let fontTable = ['18px sans-serif', '24px sans-serif', '48px sans-serif'];        
+        //let fontTable = ['18px serif', '24px serif', '48px serif'];
+        let displayAreaMinY = 20;
+        let displayAreaRandomMax = 120;
 
-        //文字のスタイルを指定
-        context.font = '32px serif';
+        context.font = fontTable[2];
         context.fillStyle = '#404040';
-        context.textBaseline = 'center';
-        speed = 5;
-
-        colorTable = ['#FFCC33', '#66FF66', '#FF0000', '#0066FF'];
+        context.textBaseline = 'left';
 
         commentData = [
-            { text: "👏👏👏👏👏👏", width: context.measureText("👏👏👏👏👏👏").width, x: 960, y: 80, color: 0, play: true },
-            { text: "8888888888", width: context.measureText("8888888888").width, x: 960, y: 120, color: 1, play: true },
+            { text: "👏👏👏👏👏👏", width: context.measureText("👏👏👏👏👏👏").width, x: startX / 2, y: 80, color: 0, play: true },
+            { text: "システムスタート！", width: context.measureText("8888888888").width, x: startX, y: 120, color: 1, play: true },
         ];
+
+        changeParameter();
 
         function draw(value) {
             context.fillStyle = colorTable[value.color];
@@ -88,6 +88,8 @@
         }
 
         timerID = setInterval(() => {
+            //canvas.width = window.innerWidth;
+
             context.clearRect(0, 0, canvas.width, canvas.height);
             commentData.forEach((v) => {
                 draw(v);
@@ -98,10 +100,44 @@
         }, 20);
 
         TESTtimerID = setInterval(() => {
-            let random = Math.floor(Math.random() * 160) +　35;
+            let random = Math.floor(Math.random() * displayAreaRandomMax) + displayAreaMinY;
             let colorIndex = Math.floor(Math.random() * 4);
-            commentData.push({ text: "😂😂😂😂😂😂" + random, width: context.measureText("😂😂😂😂😂😂").width, x: 960, y: random, color: colorIndex, play: true });
-        }, 1000);
+            commentData.push({ text: "😂😂😂😂😂😂" + random, width: context.measureText("😂😂😂😂😂😂").width, x: startX, y: random, color: colorIndex, play: true });
+        }, 3000);
+
+        function changeParameter() {
+            let fontIndex = 0
+            if (window.innerHeight > 640) {
+                fontIndex = 2;
+                displayAreaRandomMax = 120;
+                displayAreaMinY = 30;
+            } else if (window.innerHeight > 480) {
+                fontIndex = 1;
+                displayAreaRandomMax = 90;
+                displayAreaMinY = 20;
+            } else {
+                fontIndex = 0;
+                displayAreaRandomMax = 60;
+                displayAreaMinY = 12;
+            }
+            context.font = fontTable[fontIndex];
+
+            if (window.innerWidth > 1280) {
+                startX = 1920;
+                speed = 6;
+            } else if (window.innerWidth > 800) {
+                startX = 1280;
+                speed = 5;
+            } else {
+                startX = 800;
+                speed = 3;
+            }
+        }
+
+        jQuery(window).resize(function () {
+            // ここに処理を記述
+            changeParameter();
+        });
     </script>
 </body>
 
